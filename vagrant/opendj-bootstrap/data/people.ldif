@@ -21,6 +21,11 @@ objectClass: top
 cn: myGroup1
 member: uid=aschweiss,ou=people,ou=source,dc=myorg,dc=com
 
+dn: cn=myGroup2,ou=group,ou=source,dc=myorg,dc=com
+objectClass: groupOfNames
+objectClass: top
+cn: myGroup2
+
 dn: uid=aschweiss,ou=people,ou=source,dc=myorg,dc=com
 objectClass: inetOrgPerson
 objectClass: organizationalPerson
@@ -31,8 +36,142 @@ sn: Schweiss
 givenName: Axel
 uid: aschweiss
 
-dn: cn=myGroup2,ou=group,ou=source,dc=myorg,dc=com
-objectClass: groupOfNames
+dn: uid=srinnen,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
 objectClass: top
-cn: myGroup2
+cn: Sabine Rinnen
+sn: Rinnen
+givenName: Sabine
+uid: srinnen
 
+dn: uid=rhohn,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Rainer Hohn
+sn: Hohn
+givenName: Rainer
+uid: rhohn
+
+dn: uid=awandnageln,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Anne Wandnageln
+sn: Wandnageln
+givenName: Anne
+uid: awandnageln
+
+dn: uid=kauer,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Karl Auer
+sn: Auer
+givenName: Karl
+uid: kauer
+
+dn: uid=sschmitz,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Schantall Schmitz
+sn: Schmitz
+givenName: Schantall
+uid: sschmitz
+
+dn: uid=akreuz,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Andreas Kreuz
+sn: Kreutz
+givenName: Andreas
+uid: akreuz
+
+dn: uid=mnette,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Mario Nette
+sn: Nette
+givenName: Mario
+uid: mnette
+
+dn: uid=rbaer,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Roi Baer
+sn: Baer
+givenName: Roi
+uid: rbaer
+
+dn: uid=hwitzka,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Heide Witzka
+sn: Witzka
+givenName: Heide
+uid: hwitzka
+
+dn: uid=stember,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Sepp Tember
+sn: Tember
+givenName: Sepp
+uid: stember
+
+dn: uid=asapfel,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Adam Sapfel
+sn: Sapfel
+givenName: Adam
+uid: asapfel
+
+dn: uid=cgrube,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Claire Grube
+sn: Grube
+givenName: Claire
+uid: cgrube
+
+dn: uid=plahner,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Paul Lahner
+sn: Lahner
+givenName: Paul
+uid: plahner
+
+dn: uid=rhoeschen,ou=people,ou=source,dc=myorg,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: Rose Hoeschen
+sn: Hoeschen
+givenName: Rosa
+uid: rhoeschen
