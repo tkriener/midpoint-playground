@@ -38,7 +38,7 @@
             <icfcldap:uidAttribute>entryUUID</icfcldap:uidAttribute>
             <icfcldap:readSchema>true</icfcldap:readSchema>
             <icfcldap:allowUnknownAttributes>false</icfcldap:allowUnknownAttributes>
-            <icfcldap:operationalAttributes>memberOf</icfcldap:operationalAttributes>
+            <icfcldap:operationalAttributes>isMemberOf</icfcldap:operationalAttributes>
             <icfcldap:operationalAttributes>createTimestamp</icfcldap:operationalAttributes>
         </icfc:configurationProperties>
         <icfc:resultsHandlerConfiguration>
