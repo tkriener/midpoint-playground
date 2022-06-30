@@ -1,0 +1,14 @@
+dn: ou=app1,dc=myorg,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: app1
+
+dn: ou=people,ou=app1,dc=myorg,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: people
+
+dn: ou=group,ou=app1,dc=myorg,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: group

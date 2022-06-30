@@ -1,0 +1,1 @@
+This is a Playground-Project for Midpoint based on vagrant using docker containers.

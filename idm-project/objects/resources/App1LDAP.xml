@@ -1,0 +1,458 @@
+<resource xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+          xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+          xmlns:icfs="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/resource-schema-3"
+          xmlns:org="http://midpoint.evolveum.com/xml/ns/public/common/org-3"
+          xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+          xmlns:ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3"
+          xmlns:t="http://prism.evolveum.com/xml/ns/public/types-3"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:mr="http://prism.evolveum.com/xml/ns/public/matching-rule-3"
+          oid="11fa3a37-8ac8-4b18-a7cc-f7cea30832db">
+    <name>App1-LDAP</name>
+    <lifecycleState>active</lifecycleState>
+    <iteration>0</iteration>
+    <iterationToken/>
+    <connectorRef type="c:ConnectorType">
+        <description>
+            Reference to the OpenICF LDAP connector. This is dynamic reference, it will be translated to
+            OID during import.
+        </description>
+        <filter>
+            <q:equal>
+                <q:path>c:connectorType</q:path>
+                <q:value>com.evolveum.polygon.connector.ldap.LdapConnector</q:value>
+            </q:equal>
+        </filter>
+    </connectorRef>
+    <connectorConfiguration xmlns:icfc="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/connector-schema-3">
+        <icfc:configurationProperties xmlns:icfcldap="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/bundle/com.evolveum.polygon.connector-ldap/com.evolveum.polygon.connector.ldap.LdapConnector">
+            <icfcldap:host>opendj</icfcldap:host>
+            <icfcldap:port>1389</icfcldap:port>
+            <icfcldap:bindDn>cn=Directory Manager</icfcldap:bindDn>
+            <icfcldap:bindPassword>
+                <t:clearValue>Welcome1</t:clearValue>
+            </icfcldap:bindPassword>
+            <icfcldap:baseContext>ou=app1,dc=myorg,dc=com</icfcldap:baseContext>
+            <icfcldap:passwordAttribute>userPassword</icfcldap:passwordAttribute>
+            <icfcldap:pagingStrategy>auto</icfcldap:pagingStrategy>
+            <icfcldap:uidAttribute>entryUUID</icfcldap:uidAttribute>
+            <icfcldap:readSchema>true</icfcldap:readSchema>
+            <icfcldap:allowUnknownAttributes>false</icfcldap:allowUnknownAttributes>
+            <icfcldap:operationalAttributes>memberOf</icfcldap:operationalAttributes>
+            <icfcldap:operationalAttributes>createTimestamp</icfcldap:operationalAttributes>
+        </icfc:configurationProperties>
+        <icfc:resultsHandlerConfiguration>
+            <icfc:enableNormalizingResultsHandler>false</icfc:enableNormalizingResultsHandler>
+            <icfc:enableFilteredResultsHandler>false</icfc:enableFilteredResultsHandler>
+            <icfc:enableAttributesToGetSearchResultsHandler>false</icfc:enableAttributesToGetSearchResultsHandler>
+        </icfc:resultsHandlerConfiguration>
+    </connectorConfiguration>
+    <schemaHandling>
+        <objectType id="7">
+            <kind>account</kind>
+            <displayName>Person</displayName>
+            <default>true</default>
+            <objectClass>ri:inetOrgPerson</objectClass>
+            <attribute>
+                <ref>ri:dn</ref>
+                <displayName>Distinguished Name</displayName>
+                <limitations>
+                    <minOccurs>0</minOccurs>
+                    <access>
+                        <read>true</read>
+                        <add>true</add>
+                        <modify>true</modify>
+                    </access>
+                </limitations>
+                <matchingRule>mr:stringIgnoreCase</matchingRule>
+                <outbound>
+                    <source>
+                        <path>$user/name</path>
+                    </source>
+                    <expression>
+                        <script>
+                            <!-- No explicit script language was specified. It means that this is Groovy -->
+                            <code>
+                                'uid=' + name + iterationToken + ',ou=people,dc=example,dc=com'
+                            </code>
+                        </script>
+                    </expression>
+                </outbound>
+            </attribute>
+            <attribute>
+                <ref>ri:entryUUID</ref>
+                <displayName>Entry UUID</displayName>
+                <limitations>
+                    <access>
+                        <read>true</read>
+                        <add>false</add>
+                        <modify>true</modify>
+                    </access>
+                </limitations>
+                <matchingRule>mr:stringIgnoreCase</matchingRule>
+            </attribute>
+            <attribute>
+                <ref>ri:cn</ref>
+                <displayName>Common Name</displayName>
+                <limitations>
+                    <minOccurs>0</minOccurs>
+                    <access>
+                        <read>true</read>
+                        <add>true</add>
+                        <modify>true</modify>
+                    </access>
+                </limitations>
+
+                <outbound>
+                    <source>
+                        <path>$user/fullName</path>
+                    </source>
+                </outbound>
+            </attribute>
+            <attribute>
+                <ref>ri:sn</ref>
+                <displayName>Surname</displayName>
+                <limitations>
+                    <minOccurs>0</minOccurs>
+                </limitations>
+                <outbound>
+                    <source>
+                        <!-- The path can be shortened like this. $user is a default source "context" in outbound -->
+                        <path>familyName</path>
+                    </source>
+                </outbound>
+            </attribute>
+            <attribute>
+                <ref>ri:givenName</ref>
+                <displayName>Given Name</displayName>
+                <outbound>
+                    <source>
+                        <!-- Full namespace prefixes can be used in the path -->
+                        <path>$c:user/c:givenName</path>
+                    </source>
+                </outbound>
+            </attribute>
+            <attribute>
+                <ref>ri:uid</ref>
+                <displayName>Login Name</displayName>
+                <matchingRule>mr:stringIgnoreCase</matchingRule>
+                <outbound>
+                    <strength>weak</strength>
+                    <source>
+                        <description>Source may have description</description>
+                        <path>$user/name</path>
+                    </source>
+                    <!-- We need to put iterationToken here as well, otherwise effect described in MID-2139 occurs -->
+                    <expression>
+                        <script>
+                            <code>name + iterationToken</code>
+                        </script>
+                    </expression>
+                </outbound>
+            </attribute>
+            <attribute>
+                <ref>ri:description</ref>
+                <outbound>
+                    <strength>weak</strength>
+                    <expression>
+                        <description>Expression that assigns a fixed value</description>
+                        <value>Created by midPoint</value>
+                    </expression>
+                </outbound>
+            </attribute>
+
+            <association>
+                <ref>ri:ldapGroup</ref>
+                <displayName>LDAP Group Membership</displayName>
+                <matchingRule>mr:stringIgnoreCase</matchingRule>
+                <kind>entitlement</kind>
+                <intent>ldapGroup</intent>
+                <direction>objectToSubject</direction>
+                <associationAttribute>ri:member</associationAttribute>
+                <valueAttribute>ri:dn</valueAttribute>
+                <!-- XXX The following: only if OpenLDAP is configured with refint! -->
+                <explicitReferentialIntegrity>false</explicitReferentialIntegrity>
+            </association>
+
+            <activation>
+                <administrativeStatus>
+                    <outbound/>
+                </administrativeStatus>
+            </activation>
+
+            <credentials>
+                <password>
+                    <outbound>
+                        <expression>
+                            <asIs/>
+                        </expression>
+                    </outbound>
+                </password>
+            </credentials>
+
+        </objectType>
+
+        <objectType>
+            <kind>entitlement</kind>
+            <intent>ldapGroup</intent>
+            <displayName>LDAP Group</displayName>
+            <objectClass>ri:groupOfNames</objectClass>
+
+            <attribute>
+                <ref>ri:dn</ref>
+                <matchingRule>mr:stringIgnoreCase</matchingRule>
+                <outbound>
+                    <!-- Name cannot be weak. Changes in name trigger object rename. -->
+                    <source>
+                        <path>$focus/identifier</path>
+                    </source>
+                    <expression>
+                        <script>
+                            <code>
+                                basic.composeDnWithSuffix("cn", identifier, "ou=groups,dc=example,dc=com")
+                            </code>
+                        </script>
+                    </expression>
+                </outbound>
+            </attribute>
+            <attribute>
+                <ref>ri:member</ref>
+                <matchingRule>mr:distinguishedName</matchingRule>
+                <fetchStrategy>minimal</fetchStrategy>
+                <outbound>
+                    <strength>strong</strength>
+                    <!-- Workaround - groupOfNames MUST have at least one member. Even non-existent DN. -->
+                    <expression>
+                        <value>cn=dummy,o=whatever</value>
+                    </expression>
+                </outbound>
+            </attribute>
+            <attribute>
+                <ref>ri:cn</ref>
+                <matchingRule>mr:stringIgnoreCase</matchingRule>
+                <outbound>
+                    <strength>weak</strength>
+                    <source>
+                        <path>$focus/identifier</path>
+                    </source>
+                </outbound>
+            </attribute>
+            <attribute>
+                <ref>ri:description</ref>
+                <outbound>
+                    <source>
+                        <path>description</path>
+                    </source>
+                </outbound>
+            </attribute>
+            <configuredCapabilities xmlns:cap="http://midpoint.evolveum.com/xml/ns/public/resource/capabilities-3">
+                <cap:pagedSearch>
+                    <cap:defaultSortField>ri:cn</cap:defaultSortField>
+                </cap:pagedSearch>
+            </configuredCapabilities>
+        </objectType>
+    </schemaHandling>
+
+    <capabilities>
+        <native xmlns:cap="http://midpoint.evolveum.com/xml/ns/public/resource/capabilities-3">
+            <cap:schema/>
+            <cap:liveSync/>
+            <cap:testConnection/>
+            <cap:create/>
+            <cap:update>
+                <cap:delta>true</cap:delta>
+                <cap:addRemoveAttributeValues>true</cap:addRemoveAttributeValues>
+            </cap:update>
+            <cap:delete/>
+            <cap:script>
+                <cap:host>
+                    <cap:type>connector</cap:type>
+                </cap:host>
+            </cap:script>
+            <cap:credentials>
+                <cap:password>
+                    <cap:returnedByDefault>false</cap:returnedByDefault>
+                </cap:password>
+            </cap:credentials>
+            <cap:auxiliaryObjectClasses/>
+            <cap:pagedSearch/>
+            <cap:read>
+                <cap:returnDefaultAttributesOption>true</cap:returnDefaultAttributesOption>
+            </cap:read>
+        </native>
+        <configured xmlns:cap="http://midpoint.evolveum.com/xml/ns/public/resource/capabilities-3">
+            <cap:liveSync>
+                <cap:enabled>true</cap:enabled>
+            </cap:liveSync>
+            <cap:testConnection>
+                <cap:enabled>true</cap:enabled>
+            </cap:testConnection>
+            <cap:create>
+                <cap:enabled>true</cap:enabled>
+            </cap:create>
+            <cap:update>
+                <cap:enabled>true</cap:enabled>
+                <cap:delta>true</cap:delta>
+                <cap:addRemoveAttributeValues>true</cap:addRemoveAttributeValues>
+            </cap:update>
+            <cap:delete>
+                <cap:enabled>true</cap:enabled>
+            </cap:delete>
+            <cap:script>
+                <cap:enabled>true</cap:enabled>
+                <cap:host>
+                    <cap:type>connector</cap:type>
+                </cap:host>
+            </cap:script>
+            <cap:credentials>
+                <cap:enabled>true</cap:enabled>
+                <cap:password>
+                    <cap:enabled>true</cap:enabled>
+                    <cap:returnedByDefault>false</cap:returnedByDefault>
+                </cap:password>
+            </cap:credentials>
+            <cap:auxiliaryObjectClasses>
+                <cap:enabled>true</cap:enabled>
+            </cap:auxiliaryObjectClasses>
+            <cap:read>
+                <cap:enabled>true</cap:enabled>
+                <cap:returnDefaultAttributesOption>true</cap:returnDefaultAttributesOption>
+            </cap:read>
+        </configured>
+    </capabilities>
+    <!--
+            Synchronization section describes the synchronization policy, timing,
+            reactions and similar synchronization settings.
+        -->
+    <synchronization>
+        <objectSynchronization>
+            <!--
+                The synchronization for this resource is enabled.
+                It means that the synchronization will react to changes detected by
+                the system (live sync task, discovery or reconciliation) -->
+            <enabled>true</enabled>
+
+            <correlation>
+                <q:description>
+                    Correlation expression is a search query.
+                    Following search queury will look for users that have "name"
+                    equal to the "uid" attribute of the account. Simply speaking,
+                    it will look for match in usernames in the IDM and the resource.
+                    The correlation rule always looks for users, so it will not match
+                    any other object type.
+                </q:description>
+                <q:equal>
+                    <q:path>name</q:path>
+                    <expression>
+                        <path>
+                            declare namespace ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3";
+                            $account/attributes/ri:uid
+                        </path>
+                    </expression>
+                </q:equal>
+            </correlation>
+
+            <!-- Confirmation rule may be here, but as the search above will
+                 always return at most one match, the confirmation rule is not needed. -->
+
+            <!-- Following section describes reactions to a situations.
+                 The setting here assumes that this resource is authoritative,
+                 therefore all accounts created on the resource should be
+                 reflected as new users in IDM.
+                 See http://wiki.evolveum.com/display/midPoint/Synchronization+Situations
+             -->
+
+            <reaction>
+                <situation>linked</situation>
+                <synchronize>true</synchronize>
+            </reaction>
+            <reaction>
+                <situation>deleted</situation>
+                <synchronize>true</synchronize>
+                <action>
+                    <handlerUri>http://midpoint.evolveum.com/xml/ns/public/model/action-3#unlink</handlerUri>
+                </action>
+            </reaction>
+
+            <reaction>
+                <situation>unlinked</situation>
+                <synchronize>true</synchronize>
+                <action>
+                    <handlerUri>http://midpoint.evolveum.com/xml/ns/public/model/action-3#link</handlerUri>
+                </action>
+            </reaction>
+            <reaction>
+                <situation>unmatched</situation>
+                <synchronize>true</synchronize>
+                <action>
+                    <!--<handlerUri>http://midpoint.evolveum.com/xml/ns/public/model/action-3#addFocus</handlerUri>-->
+                </action>
+            </reaction>
+        </objectSynchronization>
+        <objectSynchronization>
+            <name>LdapGroup synchronization</name>
+            <!--
+                The synchronization for this resource is enabled.
+                It means that the synchronization will react to changes detected by
+                the system (live sync task, discovery or reconciliation) -->
+            <objectClass>ri:groupOfNames</objectClass>
+            <kind>entitlement</kind>
+            <intent>ldapGroup</intent>
+            <focusType>c:RoleType</focusType><!-- Entitlement will synchronize with Roles -->
+            <enabled>true</enabled>
+
+            <correlation>
+                <q:description>
+                    Correlation expression is a search query.
+                    Following search query will look for users that have "name"
+                    equal to the "uid" attribute of the account. Simply speaking,
+                    it will look for match in usernames in the IDM and the resource.
+                    The correlation rule always looks for users, so it will not match
+                    any other object type.
+                </q:description>
+                <q:equal>
+                    <q:path>identifier</q:path>
+                    <expression>
+                        <path>
+                            declare namespace ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3";
+                            $account/attributes/ri:cn
+                        </path>
+                    </expression>
+                </q:equal>
+            </correlation>
+
+            <!-- Confirmation rule may be here, but as the search above will
+                 always return at most one match, the confirmation rule is not needed. -->
+
+            <!-- Following section describes reactions to a situations.
+                 The setting here assumes that this resource is authoritative,
+                 therefore all accounts created on the resource should be
+                 reflected as new users in IDM.
+                 See http://wiki.evolveum.com/display/midPoint/Synchronization+Situations
+             -->
+
+            <reaction>
+                <situation>linked</situation>
+                <synchronize>true</synchronize>
+            </reaction>
+            <reaction>
+                <situation>deleted</situation>
+                <synchronize>true</synchronize>
+                <action>
+                    <handlerUri>http://midpoint.evolveum.com/xml/ns/public/model/action-3#unlink</handlerUri>
+                </action>
+            </reaction>
+
+            <reaction>
+                <situation>unlinked</situation>
+                <synchronize>true</synchronize>
+                <action>
+                    <handlerUri>http://midpoint.evolveum.com/xml/ns/public/model/action-3#link</handlerUri>
+                </action>
+            </reaction>
+            <reaction>
+                <situation>unmatched</situation>
+            </reaction>
+        </objectSynchronization>
+    </synchronization>
+</resource>

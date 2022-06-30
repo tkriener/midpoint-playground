@@ -1,0 +1,55 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Needs vagrant plugin vagrant-communicator-docker
+
+# Hotfix for DHCP-Error in vagrant 2.2.7 and VirtualBox 6.1.x
+class VagrantPlugins::ProviderVirtualBox::Action::Network
+  def dhcp_server_matches_config?(dhcp_server, config)
+    true
+  end
+end
+
+Vagrant.configure("2") do |config|
+
+  # OpenDJ
+  config.vm.define "opendj", autostart: true do |mp|
+    # initial data
+    mp.vm.synced_folder "./opendj-bootstrap/data", "/opt/opendj/bootstrap/data"
+    # schema
+    #mp.vm.synced_folder "./opendj-bootstrap/schema", "/opt/opendj/bootstrap/schema"
+    # data
+    mp.vm.synced_folder "../opendj-data", "/opt/opendj/data"
+
+    mp.vm.provider "docker" do |d|
+      d.image = "openidentityplatform/opendj:4.4.15"
+      d.name = "midpoint_playground_opendj"
+      #d.has_ssh = true
+      d.ports = ["10389:1389", "10636:1636"]
+      d.env = {
+        "BASE_DN" => "dc=myorg,dc=com",
+        "ROOT_PASSWORD" => "Welcome1"
+      }
+    end
+  end
+
+  # Midpoint
+  config.vm.define "midpoint", autostart: true do |mp|
+    mp.vm.synced_folder "../midpoint-home", "/opt/midpoint/var"
+    mp.vm.synced_folder "../idm-project/objects", "/opt/midpoint-dirs-docker-entrypoint"
+    
+
+    mp.vm.provider "docker" do |d|
+      d.image = "evolveum/midpoint:4.4.2-alpine"
+      #d.has_ssh = true
+      d.ports = ["8080:8080"]
+      d.link ("midpoint_playground_opendj:opendj")
+      d.env = {
+        "MP_MEM_MAX" => "4096m",
+        "MP_MEM_INIT" => "2048m"
+      }
+    end
+  end
+
+end
+
