@@ -73,7 +73,7 @@
                         <script>
                             <!-- No explicit script language was specified. It means that this is Groovy -->
                             <code>
-                                'uid=' + name + iterationToken + ',ou=people,dc=example,dc=com'
+                                'uid=' + name + iterationToken + ',ou=people,ou=app1,dc=myorg,dc=com'
                             </code>
                         </script>
                     </expression>
@@ -209,7 +209,7 @@
                     <expression>
                         <script>
                             <code>
-                                basic.composeDnWithSuffix("cn", identifier, "ou=groups,dc=example,dc=com")
+                                basic.composeDnWithSuffix("cn", identifier, "ou=group,ou=app1,dc=myorg,dc=com")
                             </code>
                         </script>
                     </expression>

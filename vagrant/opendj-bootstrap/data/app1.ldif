@@ -12,3 +12,13 @@ dn: ou=group,ou=app1,dc=myorg,dc=com
 objectClass: organizationalUnit
 objectClass: top
 ou: group
+
+dn: cn=testGroup1,ou=group,ou=app1,dc=myorg,dc=com
+objectClass: groupOfNames
+objectClass: top
+cn: testGroup1
+
+dn: cn=testGroup2,ou=group,ou=app1,dc=myorg,dc=com
+objectClass: groupOfNames
+objectClass: top
+cn: testGroup2
