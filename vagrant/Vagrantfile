@@ -13,15 +13,15 @@ end
 Vagrant.configure("2") do |config|
 
   # OpenDJ
-  config.vm.define "opendj", autostart: true do |mp|
+  config.vm.define "opendj", autostart: true do |od|
     # initial data
-    mp.vm.synced_folder "./opendj-bootstrap/data", "/opt/opendj/bootstrap/data"
+    od.vm.synced_folder "./opendj-bootstrap/data", "/opt/opendj/bootstrap/data"
     # schema
-    #mp.vm.synced_folder "./opendj-bootstrap/schema", "/opt/opendj/bootstrap/schema"
+    #od.vm.synced_folder "./opendj-bootstrap/schema", "/opt/opendj/bootstrap/schema"
     # data
-    mp.vm.synced_folder "../opendj-data", "/opt/opendj/data"
+    od.vm.synced_folder "../opendj-data", "/opt/opendj/data"
 
-    mp.vm.provider "docker" do |d|
+    od.vm.provider "docker" do |d|
       d.image = "openidentityplatform/opendj:4.4.15"
       d.name = "midpoint_playground_opendj"
       #d.has_ssh = true
