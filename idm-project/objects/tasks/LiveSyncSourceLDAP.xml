@@ -1,0 +1,46 @@
+<task xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+      xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+      xmlns:icfs="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/resource-schema-3"
+      xmlns:org="http://midpoint.evolveum.com/xml/ns/public/common/org-3"
+      xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+      xmlns:ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3"
+      xmlns:t="http://prism.evolveum.com/xml/ns/public/types-3"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      oid="cd676958-f369-4a48-8d4f-1caf3471b386">
+    <name>LiveSync SourceLDAP</name>
+    <assignment id="1">
+        <targetRef oid="00000000-0000-0000-0000-000000000504" relation="org:default" type="c:ArchetypeType"/>
+        <activation>
+            <effectiveStatus>enabled</effectiveStatus>
+        </activation>
+    </assignment>
+    <iteration>0</iteration>
+    <iterationToken/>
+    <archetypeRef oid="00000000-0000-0000-0000-000000000504" relation="org:default" type="c:ArchetypeType"/>
+    <roleMembershipRef oid="00000000-0000-0000-0000-000000000504" relation="org:default" type="c:ArchetypeType"/>
+    <taskIdentifier>1656680725493-0-1</taskIdentifier>
+    <ownerRef oid="00000000-0000-0000-0000-000000000002" relation="org:default" type="c:UserType"/>
+    <executionState>runnable</executionState>
+    <schedulingState>ready</schedulingState>
+    <category>LiveSynchronization</category>
+    <resultStatus>success</resultStatus>
+    <objectRef oid="6c7a08f9-2ffa-4d96-a18c-cec0bf3a551f" relation="org:default" type="c:ResourceType"/>
+    <progress>2</progress>
+    <binding>loose</binding>
+    <schedule>
+        <interval>10</interval>
+    </schedule>
+    <activity>
+        <work>
+            <liveSynchronization>
+                <resourceObjects>
+                    <resourceRef oid="6c7a08f9-2ffa-4d96-a18c-cec0bf3a551f" relation="org:default" type="c:ResourceType"/>
+                    <kind>account</kind>
+                    <intent>default</intent>
+                    <objectclass>ri:inetOrgPerson</objectclass>
+                </resourceObjects>
+                <updateLiveSyncTokenInDryRun>false</updateLiveSyncTokenInDryRun>
+            </liveSynchronization>
+        </work>
+    </activity>
+</task>
