@@ -33,20 +33,46 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # Postgres
+  config.vm.define "postgres", autostart: true do |pg|
+    pg.vm.synced_folder "../postgres-data", "/var/lib/postgresql/data"
+
+    pg.vm.provider "docker" do |d|
+      d.image = "postgres:13-alpine"
+      d.name = "midpoint_playground_postgres"
+      #d.has_ssh = true
+      d.ports = ["5432:5432"]
+      d.env = {
+        "POSTGRES_PASSWORD_FILE" => "/vagrant/mp_database_password.txt",
+        "POSTGRES_USER" => "midpoint",
+        "POSTGRES_INITDB_ARGS" => "--lc-collate=en_US.utf8 --lc-ctype=en_US.utf8",
+        "PGDATA" => "/var/lib/postgresql/data/pgdata"
+      }
+    end
+  end
+
   # Midpoint
   config.vm.define "midpoint", autostart: true do |mp|
     mp.vm.synced_folder "../midpoint-home", "/opt/midpoint/var"
-    mp.vm.synced_folder "../idm-project/objects", "/opt/midpoint-dirs-docker-entrypoint"
+    #mp.vm.synced_folder "../idm-project/objects", "/opt/midpoint-dirs-docker-entrypoint"
     
-
     mp.vm.provider "docker" do |d|
       d.image = "evolveum/midpoint:4.4.2-alpine"
       #d.has_ssh = true
       d.ports = ["8080:8080"]
       d.link ("midpoint_playground_opendj:opendj")
+      d.link ("midpoint_playground_postgres:postgres")
       d.env = {
         "MP_MEM_MAX" => "4096m",
-        "MP_MEM_INIT" => "2048m"
+        "MP_MEM_INIT" => "2048m",
+        "MP_ENTRY_POINT" => "/opt/midpoint-dirs-docker-entrypoint",
+        "REPO_DATABASE_TYPE" => "postgresql",
+        "REPO_HOST" => "postgres",
+        "REPO_DATABASE" => "midpoint",
+        "REPO_USER" => "midpoint",
+        "REPO_PASSWORD_FILE" => "/vagrant/mp_database_password.txt",
+        "REPO_MISSING_SCHEMA_ACTION" => "create", 
+        "REPO_UPGRADEABLE_SCHEMA_ACTION" => "upgrade",
       }
     end
   end
