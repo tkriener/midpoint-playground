@@ -2,6 +2,9 @@
 # vi: set ft=ruby :
 
 # Needs vagrant plugin vagrant-communicator-docker
+require File.dirname(__FILE__)+"/dependency_manager.rb"
+
+check_plugins ["vagrant-communicator-docker"]
 
 # Hotfix for DHCP-Error in vagrant 2.2.7 and VirtualBox 6.1.x
 class VagrantPlugins::ProviderVirtualBox::Action::Network
