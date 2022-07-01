@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objectTemplate oid="878c6797-00f5-4fe7-be13-05fc499578e7"
+                xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+                xmlns='http://midpoint.evolveum.com/xml/ns/public/common/common-3'
+                xmlns:c='http://midpoint.evolveum.com/xml/ns/public/common/common-3'
+                xmlns:t='http://prism.evolveum.com/xml/ns/public/types-3'
+                xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+                xmlns:ext="http://midpoint.evolveum.com/xml/ns/story/orgsync/ext">
+    <name>User Template</name>
+
+    <mapping>
+        <name>user role</name>
+        <expression>
+            <assignmentTargetSearch>
+                <targetType>c:RoleType</targetType>
+                <oid>e6eadfca-0dd2-4115-a961-2b9924ed10e5</oid>
+            </assignmentTargetSearch>
+        </expression>
+        <target>
+            <path>assignment</path>
+        </target>
+    </mapping>
+
+</objectTemplate>
