@@ -14,6 +14,23 @@ class VagrantPlugins::ProviderVirtualBox::Action::Network
 end
 
 Vagrant.configure("2") do |config|
+  
+  # Mailcatcher
+  config.vm.define "mailcatcher", autostart: true do |mc|
+    #Container has no shell
+    if Vagrant.has_plugin?("vagrant-proxyconf")
+      mc.proxy.enabled = false
+    end
+
+    #pg.vm.synced_folder "../postgres-data", "/var/lib/postgresql/data"
+
+    mc.vm.provider "docker" do |d|
+      d.image = "schickling/mailcatcher"
+      d.name = "midpoint_playground_mailcatcher"
+      #d.has_ssh = true
+      d.ports = ["1080:1080"]
+    end
+  end
 
   # OpenDJ
   config.vm.define "opendj", autostart: true do |od|
@@ -78,6 +95,7 @@ Vagrant.configure("2") do |config|
       d.image = "evolveum/midpoint:4.4.2-alpine"
       #d.has_ssh = true
       d.ports = ["8080:8080"]
+      d.link ("midpoint_playground_mailcatcher:mailcatcher")
       d.link ("midpoint_playground_opendj:opendj")
       d.link ("midpoint_playground_postgres:postgres")
       d.env = {
