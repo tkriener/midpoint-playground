@@ -8,6 +8,70 @@
                 xmlns:ext="http://midpoint.evolveum.com/xml/ns/story/orgsync/ext">
     <name>User Template</name>
 
+    <iterationSpecification>
+        <maxIterations>5</maxIterations>
+        <tokenExpression>
+            <script>
+                <code>
+                    if (iteration == 0) {
+                        return "";
+                    } else {
+                        return "."+iteration;
+                    }
+                </code>
+            </script>
+        </tokenExpression>
+        <postIterationCondition>
+            <variable>
+                <name>givenName</name>
+                <path>$focus/givenName</path>
+            </variable>
+            <variable>
+                <name>familyName</name>
+                <path>$focus/familyName</path>
+            </variable>
+            <script>
+                <code>
+                    def emailAddress = "";
+                    if (givenName == null &amp;&amp; familyName == null) {
+                        return true
+                    }
+                    if (familyName == null) {
+                        emailAddress = givenName?.norm + iterationToken + '@myorg.com'
+                    } else if (givenName == null) {
+                        emailAddress = familyName?.norm + iterationToken + '@myorg.com'
+                    } else {
+                        emailAddress = givenName?.norm + '.' + familyName?.norm + iterationToken + '@myorg.com'
+                    }
+                    return midpoint.isUniquePropertyValue(focus, 'emailAddress', emailAddress.toString())
+                </code>
+            </script>
+        </postIterationCondition>
+    </iterationSpecification>
+
+    <item>
+        <ref>emailAddress</ref>
+        <mapping>
+            <strength>weak</strength>
+            <source>
+                <path>givenName</path>
+            </source>
+            <source>
+                <path>familyName</path>
+            </source>
+            <expression>
+                <script>
+                    <code>
+                        if ( givenName == null &amp;&amp; familyName == null ) { return null }
+                        if ( familyName == null ) { return givenName?.norm + iterationToken + '@myorg.com' }
+                        if ( givenName == null ) { return familyName?.norm + iterationToken + '@myorg.com' }
+                        givenName?.norm + '.' + familyName?.norm + iterationToken + '@myorg.com'
+                    </code>
+                </script>
+            </expression>
+        </mapping>
+    </item>
+
     <mapping>
         <name>user role</name>
         <expression>
