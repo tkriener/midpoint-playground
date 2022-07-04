@@ -10,7 +10,19 @@
     <name>Default Security Policy</name>
     <iteration>0</iteration>
     <iterationToken/>
+    <authentication>
+        <mailAuthentication>
+            <name>confirmationLink</name>
+            <displayName>Additional mail authentication</displayName>
+            <mailNonce>mailNonce</mailNonce>
+        </mailAuthentication>
+    </authentication>
     <credentials>
+        <nonce>
+            <maxAge>PT2M</maxAge>
+            <name>mailNonce</name>
+            <valuePolicyRef oid="3019c7f5-afe0-44f7-9d68-ec6ea02fa43d" type="c:ValuePolicyType"><!-- Mail Nonce Policy --></valuePolicyRef>
+        </nonce>
         <password>
             <minOccurs>0</minOccurs>
             <lockoutMaxFailedAttempts>3</lockoutMaxFailedAttempts>
@@ -26,4 +38,10 @@
             <valuePolicyRef xmlns:tns="http://midpoint.evolveum.com/xml/ns/public/common/common-3" oid="00000000-0000-0000-0000-000000000003" relation="org:default" type="tns:ValuePolicyType"/>
         </password>
     </credentials>
+    <credentialsReset>
+        <mailReset>
+            <name>Reset password using mail</name>
+            <additionalAuthenticationName>confirmationLink</additionalAuthenticationName>
+        </mailReset>
+    </credentialsReset>
 </securityPolicy>

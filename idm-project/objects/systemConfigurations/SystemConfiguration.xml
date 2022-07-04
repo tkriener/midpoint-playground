@@ -152,6 +152,36 @@
                 <transport>mail</transport>
             </simpleResourceObjectNotifier>
         </handler>
+        <handler>
+            <passwordResetNotifier>
+                <recipientExpression>
+                    <script xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                            xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+                            xsi:type="c:ScriptExpressionEvaluatorType">
+                        <code>return requestee.getEmailAddress()</code>
+                    </script>
+                </recipientExpression>
+                <bodyExpression>
+                    <script xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                            xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+                            xsi:type="c:ScriptExpressionEvaluatorType">
+                        <code>
+
+                            import com.evolveum.midpoint.notifications.api.events.ModelEvent
+                            modelEvent = (ModelEvent) event
+                            newUser = modelEvent.getFocusContext().getObjectNew();
+                            userType = newUser.asObjectable();
+
+                            link = midpoint.createPasswordResetLink(userType)
+                            bodyMessage = link
+
+                            return bodyMessage;
+                        </code>
+                    </script>
+                </bodyExpression>
+                <transport>mail</transport>
+            </passwordResetNotifier>
+        </handler>
     </notificationConfiguration>
     <cleanupPolicy>
         <auditRecords>
@@ -747,6 +777,10 @@
             <configurableDashboardRef oid="00000000-0000-0000-0001-000000000001" relation="org:default" type="c:DashboardType"/>
         </configurableUserDashboard>
     </adminGuiConfiguration>
+    <infrastructure>
+        <defaultHostname>localhost</defaultHostname>
+        <publicHttpUrlPattern>http://$host:8080/midpoint</publicHttpUrlPattern>
+    </infrastructure>
     <expressions>
         <expressionProfile id="96">
             <identifier>safe</identifier>
