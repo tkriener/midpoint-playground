@@ -13,6 +13,16 @@ objectClass: organizationalUnit
 objectClass: top
 ou: group
 
+dn: cn=admin,ou=group,ou=app1,dc=myorg,dc=com
+objectClass: groupOfNames
+objectClass: top
+cn: admin
+
+dn: cn=user,ou=group,ou=app1,dc=myorg,dc=com
+objectClass: groupOfNames
+objectClass: top
+cn: user
+
 dn: cn=testGroup1,ou=group,ou=app1,dc=myorg,dc=com
 objectClass: groupOfNames
 objectClass: top
