@@ -1,0 +1,51 @@
+<role xmlns="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+      xmlns:c="http://midpoint.evolveum.com/xml/ns/public/common/common-3"
+      xmlns:icfs="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/resource-schema-3"
+      xmlns:org="http://midpoint.evolveum.com/xml/ns/public/common/org-3"
+      xmlns:q="http://prism.evolveum.com/xml/ns/public/query-3"
+      xmlns:ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3"
+      xmlns:t="http://prism.evolveum.com/xml/ns/public/types-3"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      oid="bc601ad6-4127-443e-9e01-5e0b5a23961a">
+    <name>ITR-App1-Admin</name>
+    <iteration>0</iteration>
+    <iterationToken/>
+    <activation>
+        <effectiveStatus>enabled</effectiveStatus>
+        <enableTimestamp>2022-07-07T16:22:38.522Z</enableTimestamp>
+    </activation>
+    <inducement id="1">
+        <construction>
+            <resourceRef oid="11fa3a37-8ac8-4b18-a7cc-f7cea30832db" relation="org:default" type="c:ResourceType"/>
+            <kind>account</kind>
+        </construction>
+    </inducement>
+    <inducement id="3">
+        <construction>
+            <resourceRef oid="11fa3a37-8ac8-4b18-a7cc-f7cea30832db" relation="org:default" type="c:ResourceType"/>
+            <kind>account</kind>
+            <intent>default</intent>
+            <association id="4">
+                <ref>ri:ldapGroup</ref>
+                <outbound>
+                    <expression>
+                        <associationTargetSearch>
+                            <filter>
+                                <q:equal>
+                                    <q:path>
+                                        declare namespace icfs="http://midpoint.evolveum.com/xml/ns/public/connector/icf-1/resource-schema-3";
+                                        declare namespace ri="http://midpoint.evolveum.com/xml/ns/public/resource/instance-3";
+                                        <!--attributes/icfs:name-->
+                                        attributes/ri:cn
+                                    </q:path>
+                                    <q:value>admin</q:value>
+                                </q:equal>
+                            </filter>
+                            <searchStrategy>onResource</searchStrategy>
+                        </associationTargetSearch>
+                    </expression>
+                </outbound>
+            </association>
+        </construction>
+    </inducement>
+</role>

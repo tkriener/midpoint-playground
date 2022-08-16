@@ -17,8 +17,10 @@ dn: cn=admin,ou=group,ou=app2,dc=myorg,dc=com
 objectClass: groupOfNames
 objectClass: top
 cn: admin
+description: Admins of App2
 
 dn: cn=user,ou=group,ou=app2,dc=myorg,dc=com
 objectClass: groupOfNames
 objectClass: top
 cn: user
+description: Users of App2

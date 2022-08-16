@@ -17,11 +17,13 @@ dn: cn=admin,ou=group,ou=app1,dc=myorg,dc=com
 objectClass: groupOfNames
 objectClass: top
 cn: admin
+description: Admins of App1
 
 dn: cn=user,ou=group,ou=app1,dc=myorg,dc=com
 objectClass: groupOfNames
 objectClass: top
 cn: user
+description: Users of App1
 
 dn: cn=testGroup1,ou=group,ou=app1,dc=myorg,dc=com
 objectClass: groupOfNames
